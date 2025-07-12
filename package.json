@@ -1,0 +1,21 @@
+{
+  "name": "coin-pwa",
+  "version": "1.0.0",
+  "description": "personal coin collection pwa",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "coin",
+    "pwa"
+  ],
+  "author": "Forz",
+  "license": "SEE LICENSE IN LICENSE",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "multer": "^2.0.1"
+  }
+}
