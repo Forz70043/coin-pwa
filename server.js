@@ -1,15 +1,19 @@
 const express = require('express');
 const cors = require('cors');
-const app = express();
+const bodyParser = require('body-parser');
+require('dotenv').config();
 
+const coinRoutes = require('./routes/coins');
+
+const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
+
+app.use('/coins', coinRoutes);
 
 app.get('/', (req, res) => {
-  res.send('API online');
+  res.send('API monete attiva');
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Server in ascolto sulla porta ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server in ascolto su http://localhost:${PORT}`));
