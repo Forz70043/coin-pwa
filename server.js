@@ -17,10 +17,12 @@ app.get('/', (req, res) => {
   res.send('API monete attiva');
 });
 
-const PORT = process.env.PORT || 3001;
-
-const server = app.listen(3001, () => {
-  console.log('Server running on port 3001');
-});
+if (require.main === module) {
+  // Only if runned with `node server.js`
+  const PORT = process.env.PORT || 3001;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
 module.exports = app; // export for supertest
