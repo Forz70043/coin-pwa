@@ -1,30 +1,7 @@
 const API_URL = 'http://localhost:3001/coins';
+let allCoins = [];
 
-document.getElementById('coin-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const form = e.target;
-  const formData = new FormData(form);
-  const id = form.dataset.id;
-  const method = id ? 'PUT' : 'POST';
-  const url = id ? `${API_URL}/${id}` : API_URL;
-
-  const response = await fetch(url, {
-    method: method,
-    body: formData
-  });
-  
-  const result = await response.json();
-  alert(id ? 'Coin updated' : 'Coin saved');
-  form.reset();
-  delete form.dataset.id;
-  loadCoins();
-});
-
-async function loadCoins() {
-  const res = await fetch(API_URL);
-  const coins = await res.json();
-
+function renderCoins(coins) {
   const list = document.getElementById('coin-list');
   list.innerHTML = '';
 
@@ -40,15 +17,12 @@ async function loadCoins() {
 
     const text = document.createTextNode(`${coin.year} ${coin.country} - ${coin.denomination}`);
     li.appendChild(text);
-    
-    
-    // Edit button
+
     const editBtn = document.createElement('button');
     editBtn.textContent = 'Edit';
     editBtn.onclick = () => populateFormForEdit(coin);
     li.appendChild(editBtn);
 
-    // Delete button
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = 'Delete';
     deleteBtn.onclick = () => deleteCoin(coin.id);
@@ -58,13 +32,18 @@ async function loadCoins() {
   });
 }
 
+async function loadCoins() {
+  const res = await fetch(API_URL);
+  allCoins = await res.json();
+  renderCoins(allCoins);
+}
+
 async function deleteCoin(id) {
   if (confirm('Are you sure you want to delete this coin?')) {
     await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
     loadCoins();
   }
 }
-
 
 function populateFormForEdit(coin) {
   const form = document.getElementById('coin-form');
@@ -89,4 +68,39 @@ window.addEventListener('load', () => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/service-worker.js');
   }
+});
+
+document.getElementById('coin-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const form = e.target;
+  const formData = new FormData(form);
+  const id = form.dataset.id;
+  const method = id ? 'PUT' : 'POST';
+  const url = id ? `${API_URL}/${id}` : API_URL;
+
+  const response = await fetch(url, {
+    method: method,
+    body: formData
+  });
+  
+  const result = await response.json();
+  alert(id ? 'Coin updated' : 'Coin saved');
+  form.reset();
+  delete form.dataset.id;
+  loadCoins();
+});
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  const query = e.target.value.toLowerCase();
+
+  const filtered = allCoins.filter(coin =>
+    (coin.country && coin.country.toLowerCase().includes(query)) ||
+    (coin.year && coin.year.toString().includes(query)) ||
+    (coin.denomination && coin.denomination.toLowerCase().includes(query)) ||
+    (coin.type && coin.type.toLowerCase().includes(query)) ||
+    (coin.material && coin.material.toLowerCase().includes(query))
+  );
+
+  renderCoins(filtered);
 });
