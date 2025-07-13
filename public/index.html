@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="/icons/favicon.ico" />
-  <title>My Coin Collection</title>
-</head>
-<body>
-  <h1>My Coin Collection</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="/icons/favicon.ico" />
+    <title>My Coin Collection</title>
+  </head>
+  <body>
+    <h1>Coin Collection</h1>
+    <p>Welcome to your coin collection app!</p>
+    <form id="coin-form" enctype="multipart/form-data">
+      <input type="text" name="type" placeholder="Type (coin/note)" required />
+      <input type="text" name="country" placeholder="Country" required />
+      <input type="number" name="year" placeholder="Year" required />
+      <input type="text" name="denomination" placeholder="Denomination" />
+      <input type="text" name="mint_mark" placeholder="Mint mark" />
+      <input type="text" name="material" placeholder="Material" />
+      <input type="text" name="grade" placeholder="Grade" />
+      <input type="file" id="image" name="image" accept="image/*" placeholder="Upload Image optional"/>
+      <button type="submit">Add Coin</button>
+    </form>
 
-  <form id="coin-form" enctype="multipart/form-data">
-    <input type="text" name="type" placeholder="Type (coin/note)" required />
-    <input type="text" name="country" placeholder="Country" required />
-    <input type="number" name="year" placeholder="Year" required />
-    <input type="text" name="denomination" placeholder="Denomination" />
-    <input type="text" name="mint_mark" placeholder="Mint mark" />
-    <input type="text" name="material" placeholder="Material" />
-    <input type="text" name="grade" placeholder="Grade" />
-    <input type="file" id="image" name="image" accept="image/*" placeholder="Upload Image optional"/>
-    <button type="submit">Add Coin</button>
-  </form>
+    <h2>All Coins</h2>
+    <input type="text" id="searchInput" placeholder="Search by country, year, denomination..." />
+    <ul id="coin-list"></ul>
 
-  <h2>All Coins</h2>
-  <ul id="coin-list"></ul>
-
-  <script src="app.js"></script>
-</body>
+    <script src="app.js"></script>
+  </body>
 </html>
