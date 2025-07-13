@@ -15,6 +15,7 @@ router.post('/', async (req, res) => {
   } = req.body;
 
   try {
+    const image = req.file ? req.file.filename : null;
     const [result] = await db.execute(
       `INSERT INTO coins (type, country, year, denomination, mint_mark, material, grade, image)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,

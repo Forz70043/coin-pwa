@@ -4,7 +4,8 @@ document.getElementById('coin-form').addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const form = e.target;
-  const data = {
+  const formData = new FormData(form);
+  /*const data = {
     type: form.type.value,
     country: form.country.value,
     year: parseInt(form.year.value),
@@ -13,14 +14,20 @@ document.getElementById('coin-form').addEventListener('submit', async (e) => {
     material: form.material.value,
     grade: form.grade.value,
     image: form.image.value
-  };
+  };*/
 
+  const response = await fetch('/coins', {
+    method: 'POST',
+    body: formData
+  });
+  /*
   await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
-  });
-
+  });*/
+  const result = await response.json();
+  alert('Moneta salvata con ID: ' + result.id);
   form.reset();
   loadCoins();
 });
@@ -34,7 +41,16 @@ async function loadCoins() {
 
   coins.forEach(coin => {
     const li = document.createElement('li');
-    li.textContent = `${coin.year} ${coin.country} - ${coin.denomination}`;
+
+    if (coin.image) {
+      const img = document.createElement('img');
+      img.src = `/uploads/${coin.image}`;
+      img.width = 100;
+      li.appendChild(img);
+    }
+
+    const text = document.createTextNode(`${coin.year} ${coin.country} - ${coin.denomination}`);
+    li.appendChild(text);
     list.appendChild(li);
   });
 }
