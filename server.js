@@ -18,4 +18,9 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Server in ascolto su http://localhost:${PORT}`));
+
+const server = app.listen(3001, () => {
+  console.log('Server running on port 3001');
+});
+
+module.exports = app; // export for supertest
