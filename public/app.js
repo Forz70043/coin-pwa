@@ -12,7 +12,7 @@ document.getElementById('coin-form').addEventListener('submit', async (e) => {
   });
   
   const result = await response.json();
-  alert('Moneta salvata con ID: ' + result.id);
+  //alert('Moneta salvata con ID: ' + result.id);
   form.reset();
   loadCoins();
 });
