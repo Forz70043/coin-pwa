@@ -5,27 +5,12 @@ document.getElementById('coin-form').addEventListener('submit', async (e) => {
 
   const form = e.target;
   const formData = new FormData(form);
-  /*const data = {
-    type: form.type.value,
-    country: form.country.value,
-    year: parseInt(form.year.value),
-    denomination: form.denomination.value,
-    mint_mark: form.mint_mark.value,
-    material: form.material.value,
-    grade: form.grade.value,
-    image: form.image.value
-  };*/
 
-  const response = await fetch('/coins', {
+  const response = await fetch(API_URL, {
     method: 'POST',
     body: formData
   });
-  /*
-  await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  });*/
+  
   const result = await response.json();
   alert('Moneta salvata con ID: ' + result.id);
   form.reset();

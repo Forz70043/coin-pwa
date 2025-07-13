@@ -1,21 +1,25 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models/db');
+const multer = require('multer');
 
-router.post('/', async (req, res) => {
-  const {
-    type,
-    country,
-    year,
-    denomination,
-    mint_mark,
-    material,
-    grade,
-    image
-  } = req.body;
+// Configurazione multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + '-' + file.originalname;
+    cb(null, uniqueName);
+  }
+});
+const upload = multer({ storage });
+
+router.post('/', upload.single('image'), async (req, res) => {
+  const { type, country, year, denomination, mint_mark, material, grade } = req.body;
+  const image = req.file ? req.file.filename : null;
 
   try {
-    const image = req.file ? req.file.filename : null;
     const [result] = await db.execute(
       `INSERT INTO coins (type, country, year, denomination, mint_mark, material, grade, image)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
