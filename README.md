@@ -1,5 +1,6 @@
 # 🪙 Coin PWA
 ![Coverage](https://coveralls.io/repos/github/Forz70043/coin-pwa/badge.svg?branch=main)
+
 **Coin PWA** is a Progressive Web App that allows you to catalog your coin collection. It works offline, supports image uploads, and stores data in a MySQL database via a Node.js backend.
 
 ## 🌐 Live Demo (if applicable)
