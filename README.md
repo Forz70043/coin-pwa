@@ -138,10 +138,10 @@ if ('serviceWorker' in navigator) {
 
 ## ✅ To Do / Future Improvements
 
-- Add coin edit/delete functionality
-- Search and filter coins
+- <del>Add coin edit/delete functionality</del>
+- <del>Search and filter coins client-side</del>
 - User authentication for multi-user support
-- Export collection to CSV/PDF
+- Export collection to CSV/PDF/JSON
 - Sync with cloud (e.g. Google Drive or Firebase)
 - Better UI/UX
 
