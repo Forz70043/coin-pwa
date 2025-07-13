@@ -5,15 +5,19 @@ document.getElementById('coin-form').addEventListener('submit', async (e) => {
 
   const form = e.target;
   const formData = new FormData(form);
+  const id = form.dataset.id;
+  const method = id ? 'PUT' : 'POST';
+  const url = id ? `${API_URL}/${id}` : API_URL;
 
-  const response = await fetch(API_URL, {
-    method: 'POST',
+  const response = await fetch(url, {
+    method: method,
     body: formData
   });
   
   const result = await response.json();
-  //alert('Moneta salvata con ID: ' + result.id);
+  alert(id ? 'Coin updated' : 'Coin saved');
   form.reset();
+  delete form.dataset.id;
   loadCoins();
 });
 
@@ -36,9 +40,47 @@ async function loadCoins() {
 
     const text = document.createTextNode(`${coin.year} ${coin.country} - ${coin.denomination}`);
     li.appendChild(text);
+    
+    
+    // Edit button
+    const editBtn = document.createElement('button');
+    editBtn.textContent = 'Edit';
+    editBtn.onclick = () => populateFormForEdit(coin);
+    li.appendChild(editBtn);
+
+    // Delete button
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = 'Delete';
+    deleteBtn.onclick = () => deleteCoin(coin.id);
+    li.appendChild(deleteBtn);
+
     list.appendChild(li);
   });
 }
+
+async function deleteCoin(id) {
+  if (confirm('Are you sure you want to delete this coin?')) {
+    await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+    loadCoins();
+  }
+}
+
+
+function populateFormForEdit(coin) {
+  const form = document.getElementById('coin-form');
+  form.dataset.id = coin.id; // Save ID for PUT
+
+  form.type.value = coin.type;
+  form.country.value = coin.country;
+  form.year.value = coin.year;
+  form.denomination.value = coin.denomination;
+  form.mint_mark.value = coin.mint_mark;
+  form.material.value = coin.material;
+  form.grade.value = coin.grade;
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 
 window.addEventListener('load', () => {
   loadCoins();

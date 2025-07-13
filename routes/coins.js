@@ -41,4 +41,41 @@ router.get('/', async (req, res) => {
   }
 });
 
+
+router.put('/:id', upload.single('image'), async (req, res) => {
+  const { type, country, year, denomination, mint_mark, material, grade } = req.body;
+  const id = req.params.id;
+  const image = req.file ? req.file.filename : null;
+
+  try {
+    let query = `UPDATE coins SET type = ?, country = ?, year = ?, denomination = ?, mint_mark = ?, material = ?, grade = ?`;
+    const params = [type, country, year, denomination, mint_mark, material, grade];
+
+    if (image) {
+      query += `, image = ?`;
+      params.push(image);
+    }
+
+    query += ` WHERE id = ?`;
+    params.push(id);
+
+    await db.execute(query, params);
+    res.json({ message: 'Coin updated' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+router.delete('/:id', async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    await db.execute('DELETE FROM coins WHERE id = ?', [id]);
+    res.json({ message: 'Coin deleted' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
