@@ -2,6 +2,14 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models/db');
 const multer = require('multer');
+const rateLimit = require('express-rate-limit');
+
+// Rate limiter for DELETE requests to protect DB and service
+const deleteLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // limit each IP to 10 delete requests per windowMs
+  message: { error: 'Too many delete requests from this IP, please try again later.' }
+});
 
 // Configurazione multer
 const storage = multer.diskStorage({
@@ -67,7 +75,7 @@ router.put('/:id', upload.single('image'), async (req, res) => {
 });
 
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', deleteLimiter, async (req, res) => {
   const id = req.params.id;
 
   try {
