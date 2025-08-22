@@ -18,6 +18,13 @@ const putLimiter = rateLimit({
   message: { error: 'Too many update requests from this IP, please try again later.' }
 });
 
+// Rate limiter for GET requests to protect DB and service
+const getLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 get requests per windowMs
+  message: { error: 'Too many requests from this IP, please try again later.' }
+});
+
 // Configurazione multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -47,7 +54,7 @@ router.post('/', upload.single('image'), async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
+router.get('/', getLimiter, async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM coins ORDER BY year DESC');
     res.json(rows);
