@@ -11,6 +11,13 @@ const deleteLimiter = rateLimit({
   message: { error: 'Too many delete requests from this IP, please try again later.' }
 });
 
+// Rate limiter for PUT requests to protect DB and service
+const putLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // limit each IP to 10 put requests per windowMs
+  message: { error: 'Too many update requests from this IP, please try again later.' }
+});
+
 // Configurazione multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -50,7 +57,7 @@ router.get('/', async (req, res) => {
 });
 
 
-router.put('/:id', upload.single('image'), async (req, res) => {
+router.put('/:id', putLimiter, upload.single('image'), async (req, res) => {
   const { type, country, year, denomination, mint_mark, material, grade } = req.body;
   const id = req.params.id;
   const image = req.file ? req.file.filename : null;
