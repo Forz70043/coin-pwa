@@ -18,6 +18,13 @@ const putLimiter = rateLimit({
   message: { error: 'Too many update requests from this IP, please try again later.' }
 });
 
+// Rate limiter for POST requests to protect DB and service
+const postLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // limit each IP to 20 post requests per windowMs
+  message: { error: 'Too many create requests from this IP, please try again later.' }
+});
+
 // Rate limiter for GET requests to protect DB and service
 const getLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -37,7 +44,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-router.post('/', upload.single('image'), async (req, res) => {
+router.post('/', postLimiter, upload.single('image'), async (req, res) => {
   const { type, country, year, denomination, mint_mark, material, grade } = req.body;
   const image = req.file ? req.file.filename : null;
 
